@@ -15,11 +15,13 @@ class Form extends React.Component{
     constructor(props){
         super(props);
         this.state = {
+            activated: false,
             length: 0,
             uppercaseLetters: false,
             lowercaseLetters: false,
             numbers: false, 
-            nonAlphaNumeric: false
+            nonAlphaNumeric: false,
+            goodLength: false
         }
         // this.getFormEntries = this.getFormEntries.bind(this);
         this.handleClick = this.handleClick.bind(this);
@@ -33,11 +35,13 @@ class Form extends React.Component{
         let nums = document.getElementById("num")
         let nonAlphaNumeric = document.getElementById("nonAlphaNumeric")
         const requestPayload = {
+            activated:true,
             length:numChars.value,
             uppercaseLetters:upperCase.checked,
             lowercaseLetters:lowerCase.checked,
             numbers:nums.checked,
-            nonAlphaNumeric:nonAlphaNumeric.checked
+            nonAlphaNumeric:nonAlphaNumeric.checked,
+            goodLength: (numChars.value > 0 && numChars.value < 30)
         }
         this.setState(st => requestPayload)
         numChars.value = ''
@@ -83,11 +87,7 @@ class Form extends React.Component{
                 <button onClick={this.handleClick}>Submit</button>  
             </section>
             {
-                (this.state.length > 0 && this.state.length < 30) ? <Result values={this.state}/> : (
-                    <div>
-                        <p>Please request a length larger than 0 and less than 30</p>
-                    </div>
-                )
+                this.state.goodLength && <Result values={this.state}/>
             }
         </div>
         )
